@@ -19,10 +19,11 @@ const Header = () => {
           <Link to="/offers" className="hover:text-yellow-300 transition-colors">العروض</Link>
           <Link to="/contact" className="hover:text-yellow-300 transition-colors">اتصل بنا</Link>
         </nav>
-        
+        <Link to="/register">
         <button className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md transition-colors">
           سجل مشتلك
         </button>
+        </Link>
       </div>
     </header>
   );

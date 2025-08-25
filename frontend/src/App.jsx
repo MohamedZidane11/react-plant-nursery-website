@@ -6,7 +6,7 @@ import Nurseries from './pages/Nurseries'
 import NurseryDetail from './pages/NurseryDetail';
 import Offers from './pages/Offers';
 import Contact from './pages/Contact';
-import Test from './pages/tempo';
+import RegisterNursery from './components/RegisterNursery';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
             <Route path="/nurseries/:id" element={<NurseryDetail />} />
             <Route path="/offers" element={<Offers />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/tempo" element={<Test />} />
+            <Route path="/register" element={<RegisterNursery />} />
           </Routes>
         </main>
         
