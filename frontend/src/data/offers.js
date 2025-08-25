@@ -13,7 +13,7 @@ export const offers = [
       title: "توصيل مجاني للطلبات فوق 200 ريال",
       description: "استمتع بخدمة التوصيل المجاني لجميع أنحاء جدة عند الشراء بقيمة 200 ريال أو أكثر",
       tags: ["توصيل", "مشاتل"],
-      endDate: "15 ديسمبر 2024",
+      endDate: "15 أكتوبر 2025",
       discount: null,
       highlighted: false
     },
