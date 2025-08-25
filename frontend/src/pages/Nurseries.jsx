@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import NurseryCard from '../components/NurseryCard';
 import SearchBar from '../components/SearchBar';
 import { nurseries } from '../data/nurseries';
@@ -98,6 +99,17 @@ const Nurseries = () => {
       setCurrentPage(page);
     }
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    searchTerm,
+    selectedCategory,
+    selectedRegion,
+    selectedDistrict,
+    showOffersOnly,
+    sortBy
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">

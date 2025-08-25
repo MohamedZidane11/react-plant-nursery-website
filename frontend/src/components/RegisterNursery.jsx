@@ -1,4 +1,6 @@
+// src/pages/RegisterNursery.jsx
 import React, { useState } from 'react';
+import { addNursery } from '../data/nurseries';
 
 const RegisterNursery = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +15,6 @@ const RegisterNursery = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -23,21 +24,21 @@ const RegisterNursery = () => {
   };
 
   const handleCategoryChange = (category) => {
-    setFormData((prev) => {
-      const updatedCategories = prev.categories.includes(category)
+    setFormData((prev) => ({
+      ...prev,
+      categories: prev.categories.includes(category)
         ? prev.categories.filter((c) => c !== category)
-        : [...prev.categories, category];
-      return { ...prev, categories: updatedCategories };
-    });
+        : [...prev.categories, category]
+    }));
   };
 
   const handleServiceChange = (service) => {
-    setFormData((prev) => {
-      const updatedServices = prev.services.includes(service)
+    setFormData((prev) => ({
+      ...prev,
+      services: prev.services.includes(service)
         ? prev.services.filter((s) => s !== service)
-        : [...prev.services, service];
-      return { ...prev, services: updatedServices };
-    });
+        : [...prev.services, service]
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -53,15 +54,39 @@ const RegisterNursery = () => {
       return;
     }
 
-    console.log('Submitted:', formData);
-    alert('تم التسجيل بنجاح!');
-    // Here you would typically send data to an API
+    // ✅ Add to nurseries list
+    try {
+      const trimmedFormData = {
+        ...formData,
+        image: formData.image.trim(),
+        location: formData.location.trim(),
+        name: formData.name.trim(),
+        discount: formData.discount ? Number(formData.discount) : null
+      };
+
+      addNursery(trimmedFormData);
+      console.log('Nursery added successfully!');
+
+      // Reset form
+      setFormData({
+        name: '',
+        image: '',
+        categories: [],
+        location: '',
+        services: [],
+        featured: false,
+        discount: null,
+      });
+
+      alert('تم تسجيل مشتلّك بنجاح! سيظهر قريبًا في القائمة.');
+    } catch (err) {
+      alert('حدث خطأ أثناء التسجيل. حاول لاحقًا.');
+      console.error(err);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-
-      {/* Main Content */}
       <main className="container mx-auto p-6">
         <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
           <h2 className="text-2xl font-bold text-center mb-6 text-green-800">
@@ -90,7 +115,7 @@ const RegisterNursery = () => {
             {/* Image URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                رابط الصورة (مثال: https://via.placeholder.com/100x100?text=Flowers)
+                رابط الصورة
               </label>
               <input
                 type="url"
@@ -100,7 +125,7 @@ const RegisterNursery = () => {
                 className={`w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none ${
                   errors.image ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="https://..."
+                placeholder="https://example.com/image.jpg"
               />
               {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
             </div>
@@ -115,8 +140,6 @@ const RegisterNursery = () => {
                   <label key={cat} className="flex items-center">
                     <input
                       type="checkbox"
-                      name="categories"
-                      value={cat}
                       checked={formData.categories.includes(cat)}
                       onChange={() => handleCategoryChange(cat)}
                       className="mr-2 h-4 w-4 text-green-600"
@@ -162,8 +185,6 @@ const RegisterNursery = () => {
                     <label key={svc} className="flex items-center">
                       <input
                         type="checkbox"
-                        name="services"
-                        value={svc}
                         checked={formData.services.includes(svc)}
                         onChange={() => handleServiceChange(svc)}
                         className="mr-2 h-4 w-4 text-green-600"
@@ -206,7 +227,6 @@ const RegisterNursery = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition"
@@ -216,7 +236,6 @@ const RegisterNursery = () => {
           </form>
         </div>
       </main>
-
     </div>
   );
 };
