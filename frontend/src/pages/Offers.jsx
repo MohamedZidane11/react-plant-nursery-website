@@ -1,17 +1,38 @@
+// src/pages/Offers.jsx
 import { useState, useEffect } from 'react';
 import OfferCard from '../components/OfferCard';
-import { offers } from '../data/offers';
 
 const Offers = () => {
+  const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  // 🔍 Filter & Sort State
+  // 🔍 Filters
   const [filterType, setFilterType] = useState('all');
   const [filterCategory, setFilterCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
 
-  // 🔎 Filtered and sorted offers
+  // 🌐 Fetch offers from backend
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/offers');
+        if (!response.ok) throw new Error('فشل تحميل العروض');
+        const data = await response.json();
+        setOffers(data);
+      } catch (err) {
+        console.error('Error fetching offers:', err);
+        alert('تعذر الاتصال بالخادم');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOffers();
+  }, []);
+
+  // 🔎 Filter offers
   const filteredOffers = offers.filter((offer) => {
     // Filter by type
     if (filterType !== 'all') {
@@ -27,8 +48,7 @@ const Offers = () => {
 
     return true;
   }).sort((a, b) => {
-    // Sort
-    if (sortBy === 'newest') return b.id - a.id;
+    if (sortBy === 'newest') return b._id - a._id; // or use createdAt if available
     if (sortBy === 'popular') return (b.highlighted ? 1 : 0) - (a.highlighted ? 1 : 0);
     if (sortBy === 'lowest_price' && a.discount !== null && b.discount !== null) {
       return a.discount - b.discount;
@@ -37,12 +57,6 @@ const Offers = () => {
   });
 
   const totalPages = Math.ceil(filteredOffers.length / itemsPerPage);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filterType, filterCategory, sortBy]);
-
   const currentOffers = filteredOffers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -53,6 +67,15 @@ const Offers = () => {
       setCurrentPage(page);
     }
   };
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterType, filterCategory, sortBy]);
+
+  if (loading) {
+    return <p className="text-center py-8">جاري التحميل...</p>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -123,7 +146,7 @@ const Offers = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {currentOffers.length > 0 ? (
               currentOffers.map((offer) => (
-                <OfferCard key={offer.id} offer={offer} />
+                <OfferCard key={offer._id} offer={offer} />
               ))
             ) : (
               <p className="col-span-full text-center text-gray-500 py-8">

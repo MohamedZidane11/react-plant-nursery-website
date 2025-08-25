@@ -1,6 +1,6 @@
 // src/pages/RegisterNursery.jsx
 import React, { useState } from 'react';
-import { addNursery } from '../data/nurseries';
+import axios from 'axios';
 
 const RegisterNursery = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +14,7 @@ const RegisterNursery = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,10 +42,11 @@ const RegisterNursery = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = {};
 
+    // Validation
+    const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'الاسم مطلوب';
     if (!formData.location.trim()) newErrors.location = 'الموقع مطلوب';
     if (!formData.image.trim()) newErrors.image = 'صورة المشتل مطلوبة';
@@ -54,19 +56,22 @@ const RegisterNursery = () => {
       return;
     }
 
-    // ✅ Add to nurseries list
+    setSubmitting(true);
+
     try {
       const trimmedFormData = {
         ...formData,
-        image: formData.image.trim(),
-        location: formData.location.trim(),
         name: formData.name.trim(),
-        discount: formData.discount ? Number(formData.discount) : null
+        location: formData.location.trim(),
+        image: formData.image.trim(),
+        discount: formData.discount ? Number(formData.discount) : null,
       };
 
-      addNursery(trimmedFormData);
-      console.log('Nursery added successfully!');
+      // ✅ Send to backend
+      await axios.post('http://localhost:5000/api/nurseries', trimmedFormData);
 
+      alert('تم تسجيل مشتلّك بنجاح! سيظهر قريبًا في القائمة.');
+      
       // Reset form
       setFormData({
         name: '',
@@ -77,11 +82,13 @@ const RegisterNursery = () => {
         featured: false,
         discount: null,
       });
+      setErrors({});
 
-      alert('تم تسجيل مشتلّك بنجاح! سيظهر قريبًا في القائمة.');
     } catch (err) {
-      alert('حدث خطأ أثناء التسجيل. حاول لاحقًا.');
-      console.error(err);
+      console.error('Error submitting nursery:', err);
+      alert('فشل في الإرسال. تأكد من أن الخادم يعمل.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -229,9 +236,10 @@ const RegisterNursery = () => {
 
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition"
+              disabled={submitting}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-70"
             >
-              إرسال الطلب
+              {submitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
             </button>
           </form>
         </div>

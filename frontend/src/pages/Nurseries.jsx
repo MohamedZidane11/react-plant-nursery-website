@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import NurseryCard from '../components/NurseryCard';
 import SearchBar from '../components/SearchBar';
-import { nurseries } from '../data/nurseries';
 
 const Nurseries = () => {
+  const [nurseries, setNurseries] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
@@ -16,7 +16,26 @@ const Nurseries = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [showOffersOnly, setShowOffersOnly] = useState(false);
 
-  // 🌆 Extract unique cities and districts
+  // 🌐 Fetch nurseries from backend
+  useEffect(() => {
+    const fetchNurseries = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/nurseries');
+        if (!response.ok) throw new Error('فشل تحميل المشاتل');
+        const data = await response.json();
+        setNurseries(data);
+      } catch (err) {
+        console.error('Error fetching nurseries:', err);
+        alert('تعذر الاتصال بالخادم');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNurseries();
+  }, []);
+
+  // 🌆 Extract cities & districts from fetched data
   const cityToDistricts = nurseries.reduce((acc, nursery) => {
     const parts = nursery.location.split('-').map(part => part.trim());
     const city = parts[0];
@@ -28,20 +47,18 @@ const Nurseries = () => {
     return acc;
   }, {});
 
-  // Convert Sets to sorted arrays
   Object.keys(cityToDistricts).forEach(city => {
     cityToDistricts[city] = [...cityToDistricts[city]].sort();
   });
 
   const allCities = [...Object.keys(cityToDistricts)].sort();
 
-  // 🔎 Filter nurseries
+  // 🔎 Filter nurseries (same logic, but on fetched data)
   const filteredNurseries = nurseries.filter((nursery) => {
     const parts = nursery.location.split('-').map(part => part.trim());
     const city = parts[0];
     const district = parts.length > 1 ? parts[1] : 'غير محدد';
 
-    // Search: name, location, categories
     const matchesSearch = searchTerm
       ? nursery.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         nursery.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -50,40 +67,24 @@ const Nurseries = () => {
         )
       : true;
 
-    // ✅ Fixed: Category filtering
     const matchesCategory = selectedCategory === 'all' ? true : nursery.categories.some((cat) => {
-      if (selectedCategory === 'nursery') {
-        return ['مشاتل', 'مشاتل مختلطة'].includes(cat);
-      }
-      if (selectedCategory === 'tools') {
-        return ['معدات', 'أدوات الزراعة'].includes(cat);
-      }
-      if (selectedCategory === 'plants') {
-        return ['زهور', 'نخيل', 'نباتات داخلية', 'نباتات خارجية'].includes(cat);
-      }
+      if (selectedCategory === 'nursery') return ['مشاتل', 'مشاتل مختلطة'].includes(cat);
+      if (selectedCategory === 'tools') return ['معدات', 'أدوات الزراعة'].includes(cat);
+      if (selectedCategory === 'plants') return ['زهور', 'نخيل', 'نباتات داخلية', 'نباتات خارجية'].includes(cat);
       return false;
     });
 
-    // City
     const matchesCity = selectedRegion === 'all' || city === selectedRegion;
-
-    // District (only if city is selected)
-    const matchesDistrict =
-      selectedDistrict === 'all' ||
-      selectedRegion === 'all' ||
-      district === selectedDistrict;
-
-    // Offers only
+    const matchesDistrict = selectedDistrict === 'all' || selectedRegion === 'all' || district === selectedDistrict;
     const matchesOffer = showOffersOnly ? nursery.discount !== null : true;
 
     return matchesSearch && matchesCategory && matchesCity && matchesDistrict && matchesOffer;
   });
 
-  // 📊 Sort nurseries
+  // 📊 Sort
   const sortedNurseries = [...filteredNurseries].sort((a, b) => {
-    if (sortBy === 'newest') return b.id - a.id;
+    if (sortBy === 'newest') return b._id - a._id; // or use createdAt if available
     if (sortBy === 'popular') return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-    if (sortBy === 'rating') return (b.rating || 5) - (a.rating || 5); // fallback rating
     return 0;
   });
 
@@ -100,16 +101,14 @@ const Nurseries = () => {
     }
   };
 
+  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [
-    searchTerm,
-    selectedCategory,
-    selectedRegion,
-    selectedDistrict,
-    showOffersOnly,
-    sortBy
-  ]);
+  }, [searchTerm, selectedCategory, selectedRegion, selectedDistrict, showOffersOnly, sortBy]);
+
+  if (loading) {
+    return <p className="text-center py-8">جاري التحميل...</p>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -134,7 +133,6 @@ const Nurseries = () => {
               setShowOffersOnly={setShowOffersOnly}
             />
 
-            {/* Sort & Offers Only */}
             <div className="flex flex-col md:flex-row gap-4 mt-4">
               <select
                 value={sortBy}
@@ -165,15 +163,13 @@ const Nurseries = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
-            <p className="text-gray-600">
-              عُثر على {sortedNurseries.length} مشتل
-            </p>
+            <p className="text-gray-600">عُثر على {sortedNurseries.length} مشتل</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {currentNurseries.length > 0 ? (
               currentNurseries.map((nursery) => (
-                <NurseryCard key={nursery.id} nursery={nursery} />
+                <NurseryCard key={nursery._id} nursery={nursery} />
               ))
             ) : (
               <p className="col-span-full text-center text-gray-500 py-8">
