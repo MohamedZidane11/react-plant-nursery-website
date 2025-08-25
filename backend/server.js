@@ -10,11 +10,26 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+// 🔽 Allow multiple origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://react-plant-nursery-website.vercel.app'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
+
 app.use(express.json());
 
 // Routes
