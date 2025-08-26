@@ -41,3 +41,25 @@ Live Demo: https://react-plant-nursery-website.vercel.app/
 </p>
 
 ---
+
+### 💡 Key Features
+
+✅ **Smart Search** – Find nurseries by name, location, or category  
+✅ **Advanced Filters** – Filter by city, category, or ongoing offers  
+✅ **Exclusive Deals** – Browse current discounts, free delivery & more  
+✅ **Fully Responsive** – Works seamlessly on mobile, tablet, and desktop 📱💻  
+✅ **Arabic UI** – Native RTL design with full Arabic support  
+✅ **Register a Nursery** – Submit your nursery to be listed  
+✅ **Dynamic Offers Section** – Real-time display of active promotions  
+✅ **Sponsored Nurseries** – Highlighted premium partners ✨
+
+---
+
+### 📋 Prerequisites
+Before running this project, make sure you have:
+
+- 🐙 Git  
+- 📦 Node.js 18+ and npm  
+- 🔧 Modern web browser (Chrome, Firefox, Safari, Edge)   
+
+---
