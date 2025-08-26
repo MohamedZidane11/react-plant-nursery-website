@@ -111,3 +111,47 @@ Navigate to http://localhost:5173/
 #### * This project requires a backend server for full functionality.
 
 ---
+
+### 📁 Project Structure
+react-plant-nursery-website/    
+├── 📂 frontend/    
+│   ├──📂 public/  
+│   ├── 🖼️ images/  
+│   └── 📄 favicon.ico  
+│   ├──📂 src/     
+│   │   ├── 📂 components/  
+│   │   ├─ 📂 Layout/   
+│   │   │   ├── 🎴 Footer.jsx  
+│   │   │   └── 🔍 Header.jsx    
+│   │   ├─ 📂 UI/   
+│   │   │   ├── 🎴 Button.jsx  
+│   │   │   └── 🔍 Card.jsx     
+│   │   ├── 🎴 NurseryCard.jsx  
+│   │   ├── 🎴 OfferCard.jsx  
+│   │   ├── 🎴 RegisterNursery.jsx  
+│   │   └── 🔍 SearchBar.jsx    
+│   ├── 📂 data/    
+│   │   ├── 📄 nurseries.js     
+│   │   └── 📄 offers.js    
+│   ├── 📂 pages/  
+│   │   ├── 🎴 Contact.jsx  
+│   │   ├── 🏠 Home.jsx     
+│   │   ├── 🌿 Nurseries.jsx   
+│   │   ├── 📝 NurseryDetail.jsx    
+│   │   └── 💰 Offers.jsx  
+│   ├── 🎴 App.css  
+│   ├── 🎴 App.jsx  
+│   ├── 📄 index.css    
+│   ├── 🎴 main.jsx  
+│   └── 🏠 index.html        
+├── 📂 backend/     
+│   ├── 📂 models/  
+│   │   ├── 📄 Nursery.js   
+│   │   └── 📄 Offer.js     
+│   ├── 📂 routes/  
+│   │   ├── 📄 nurseries.js     
+│   │   └── 📄 offers.js       
+│   └── 📄 server.js    
+└── 📄 package.json
+
+---
