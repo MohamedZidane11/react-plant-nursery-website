@@ -193,3 +193,14 @@ POST /api/nurseries - Add a new nursery
 POST /api/offers - Add a new offer
 ```
 ---
+
+### 🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+🍴 Fork the repository  
+🌿 Create your feature branch (git checkout -b feature/AmazingFeature)  
+💾 Commit your changes (git commit -m 'Add some AmazingFeature')    
+📤 Push to the branch (git push origin feature/AmazingFeature)  
+🔄 Open a Pull Request  
+
+---
