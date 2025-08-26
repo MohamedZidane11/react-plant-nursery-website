@@ -63,3 +63,51 @@ Before running this project, make sure you have:
 - 🔧 Modern web browser (Chrome, Firefox, Safari, Edge)   
 
 ---
+
+### 🚀 Quick Start
+
+* Clone the repository
+
+```bash
+# Clone the repository
+git clone https://github.com/MohamedZidane11/react-plant-nursery-website.git
+cd react-plant-nursery-website
+```
+* Run backend server
+
+1. Install backend dependencies
+
+``` bash
+cd backend
+npm install
+Create .env file
+env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+FRONTEND_URL=http://localhost:5173
+```
+
+2. Start backend server
+
+``` bash
+npm run dev
+```
+* Run frontend server
+1. Install frontend dependencies
+
+```bash
+cd frontend
+nmp install
+```
+2. Start development server
+
+```bash
+npm run dev
+```
+
+3. Open your browser 🌐    
+Navigate to http://localhost:5173/
+
+#### * This project requires a backend server for full functionality.
+
+---
