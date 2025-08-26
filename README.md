@@ -173,3 +173,23 @@ react-plant-nursery-website/
 - Submit to add to the database 
 
 ---
+
+### ☁️ Deployment   
+1. Frontend Deployment  
+- 🚀 Vercel - Automatic deployment from GitHub
+- 🌐 GitHub Pages - Free static hosting
+
+2. Backend Deployment
+- 🚆 Railway - Easy Node.js and MongoDB hosting
+- 🛢️ MongoDB Atlas - Cloud database hosting
+
+3. 🌐 API Endpoints
+The backend provides the following RESTful API endpoints:
+
+```bash
+GET /api/nurseries - Get all nurseries
+GET /api/offers - Get all offers
+POST /api/nurseries - Add a new nursery
+POST /api/offers - Add a new offer
+```
+---
