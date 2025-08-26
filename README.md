@@ -155,3 +155,21 @@ react-plant-nursery-website/
 └── 📄 package.json
 
 ---
+
+### 🎨 Customization
+1. Updating Content     
+- Edit nursery data in src/data/nurseries.js  
+- Modify offers in src/data/offers.js     
+- Update homepage content in src/pages/Home.jsx   
+
+2. Configuration   
+- Change styling in src/styles/   
+- Customize components in src/components/     
+- Modify page layouts in src/pages/      
+
+3. Adding New Nurseries       
+- Navigate to /register   
+- Fill out the nursery registration form  
+- Submit to add to the database 
+
+---
