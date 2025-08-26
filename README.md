@@ -204,3 +204,27 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 🔄 Open a Pull Request  
 
 ---
+
+### 📝 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+### 🙏 Acknowledgments
+
+Built with ❤️ using React and Node.js   
+Data powered by MongoDB 
+Hosted on Vercel and Railway    
+Inspired by the growing gardening community 
+
+<div align="center">     
+⭐ Star this repo if you find it helpful! ⭐
+</div>
+
+---
+
+## 🙌 Let’s Grow Together!
+
+Whether you're a gardener, nursery owner, or developer — your contribution helps build a greener, more connected Saudi Arabia. 🇸🇦
+
+🌱 **Plant seeds. Build communities. Grow together.**
